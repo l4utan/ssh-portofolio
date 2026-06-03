@@ -4,31 +4,33 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/l4utan/ssh-portofolio/constants"
+	"github.com/l4utan/ssh-portofolio/internal/model"
 )
 
-func (m model) menuView() string {
-	w, h := m.width, m.height
+func MenuView(m model.Model) string {
+	w, h := m.Width, m.Height
 
-	divider := dividerStyle.Render(strings.Repeat("─", 30))
+	divider := DividerStyle.Render(strings.Repeat("─", 30))
 
 	var lines []string
-	lines = append(lines, menuTitleStyle.Render(yourName))
-	lines = append(lines, menuSubtitleStyle.Render("Programmer"))
+	lines = append(lines, MenuTitleStyle.Render(constants.YourName))
+	lines = append(lines, MenuSubtitleStyle.Render("Programmer"))
 	lines = append(lines, "")
 	lines = append(lines, divider)
 	lines = append(lines, "")
 
-	for i, s := range m.sections {
-		if i == m.cursor {
-			lines = append(lines, selectedStyle.Render("▶ "+s))
+	for i, s := range m.Sections {
+		if i == m.Cursor {
+			lines = append(lines, SelectedStyle.Render("▶ "+s))
 		} else {
-			lines = append(lines, normalStyle.Render(s))
+			lines = append(lines, NormalStyle.Render(s))
 		}
 	}
 
 	lines = append(lines, "")
 	lines = append(lines, divider)
-	lines = append(lines, footerStyle.Render("↑/↓ navigate · enter select · q quit"))
+	lines = append(lines, FooterStyle.Render("↑/↓ navigate · enter select · q quit"))
 
 	content := strings.Join(lines, "\n")
 	contentLines := strings.Split(content, "\n")
@@ -42,7 +44,6 @@ func (m model) menuView() string {
 	sb.WriteString(strings.Repeat("\n", topPad))
 
 	for _, line := range contentLines {
-		// lipgloss.Width strips ANSI codes before measuring
 		visLen := lipgloss.Width(line)
 		leftPad := (w - visLen) / 2
 		if leftPad < 0 {

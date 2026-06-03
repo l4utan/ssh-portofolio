@@ -5,46 +5,43 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/l4utan/ssh-portofolio/internal/model"
 )
 
-// ── Edit konten di sini ──────────────────────────────────────────────────────
-
 type project struct {
-	name  string
-	desc  string
-	tech  []string
-	url   string
-	year  string
+	name string
+	desc string
+	tech []string
+	url  string
+	year string
 }
 
 var projectsList = []project{
 	{
-		name: "ssh-portfolio",
+		name: "ssh-portofolio",
 		desc: "This terminal — an interactive SSH portfolio built with Wish + Bubbletea.",
 		tech: []string{"Go", "Wish", "Bubbletea", "Lipgloss"},
-		url:  "github.com/joesluis/ssh-portfolio",
+		url:  "github.com/l4utan/ssh-portofolio",
 		year: "2025",
 	},
 	{
 		name: "project-two",
 		desc: "Short description of what this project does and why it matters.",
 		tech: []string{"Go", "PostgreSQL"},
-		url:  "github.com/joesluis/project-two",
+		url:  "github.com/l4utan/project-two",
 		year: "2024",
 	},
 	{
 		name: "project-three",
 		desc: "Short description of what this project does and why it matters.",
 		tech: []string{"TypeScript", "React"},
-		url:  "github.com/joesluis/project-three",
+		url:  "github.com/l4utan/project-three",
 		year: "2024",
 	},
 }
 
-// ── View (jangan diubah kecuali mau ubah layout) ─────────────────────────────
-
-func (m model) projectsView() string {
-	w, h := m.width, m.height
+func ProjectsView(m model.Model) string {
+	w, h := m.Width, m.Height
 
 	projectNameStyle := lipgloss.NewStyle().
 		Bold(true).
@@ -59,11 +56,11 @@ func (m model) projectsView() string {
 	yearStyle := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#475569"))
 
-	divider := dividerStyle.Render(strings.Repeat("─", 40))
-	thinDiv := dividerStyle.Render(strings.Repeat("·", 40))
+	divider := DividerStyle.Render(strings.Repeat("─", 40))
+	thinDiv := DividerStyle.Render(strings.Repeat("·", 40))
 
 	var lines []string
-	lines = append(lines, menuTitleStyle.Render("Projects"))
+	lines = append(lines, MenuTitleStyle.Render("Projects"))
 	lines = append(lines, divider)
 	lines = append(lines, "")
 
@@ -74,7 +71,7 @@ func (m model) projectsView() string {
 
 		techRow := techStyle.Render("stack  ")
 		for _, t := range p.tech {
-			techRow += techStyle.Render(t+" ")
+			techRow += techStyle.Render(t + " ")
 		}
 		lines = append(lines, techRow)
 		lines = append(lines, urlStyle.Render("↗  "+p.url))
@@ -88,7 +85,7 @@ func (m model) projectsView() string {
 
 	lines = append(lines, "")
 	lines = append(lines, divider)
-	lines = append(lines, footerStyle.Render("esc / b → back to menu"))
+	lines = append(lines, FooterStyle.Render("esc / b → back to menu"))
 
-	return centerBlock(lines, w, h)
+	return CenterBlock(lines, w, h)
 }

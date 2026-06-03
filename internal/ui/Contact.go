@@ -4,9 +4,8 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/l4utan/ssh-portofolio/internal/model"
 )
-
-// ── Edit konten di sini ──────────────────────────────────────────────────────
 
 var contactContent = struct {
 	email   string
@@ -16,16 +15,13 @@ var contactContent = struct {
 	note    string
 }{
 	email:   "joe@joesluis.dev",
-	github:  "github.com/joesluis",
-	twitter: "@joesluis",
-	web:     "joesluis.dev",
+	github:  "github.com/l4utan",
+	web:     "-- WORKING ON --",
 	note:    "Best reached via email. I usually reply within 24 hours.",
 }
 
-// ── View (jangan diubah kecuali mau ubah layout) ─────────────────────────────
-
-func (m model) contactView() string {
-	w, h := m.width, m.height
+func ContactView(m model.Model) string {
+	w, h := m.Width, m.Height
 	cc := contactContent
 
 	sectionTitleStyle := lipgloss.NewStyle().
@@ -39,27 +35,26 @@ func (m model) contactView() string {
 		Foreground(lipgloss.Color("#64748B")).
 		Italic(true)
 
-	divider := dividerStyle.Render(strings.Repeat("─", 40))
+	divider := DividerStyle.Render(strings.Repeat("─", 40))
 
 	row := func(icon, label, val string) string {
 		return iconStyle.Render(icon+"  "+label+"  ") + valueStyle.Render(val)
 	}
 
 	var lines []string
-	lines = append(lines, menuTitleStyle.Render("Contact"))
+	lines = append(lines, MenuTitleStyle.Render("Contact"))
 	lines = append(lines, divider)
 	lines = append(lines, "")
 	lines = append(lines, sectionTitleStyle.Render("// reach me at"))
 	lines = append(lines, "")
 	lines = append(lines, row("✉", "email  ", cc.email))
 	lines = append(lines, row("⌥", "github ", cc.github))
-	lines = append(lines, row("◈", "twitter", cc.twitter))
 	lines = append(lines, row("◉", "web    ", cc.web))
 	lines = append(lines, "")
 	lines = append(lines, noteStyle.Render(cc.note))
 	lines = append(lines, "")
 	lines = append(lines, divider)
-	lines = append(lines, footerStyle.Render("esc / b → back to menu"))
+	lines = append(lines, FooterStyle.Render("esc / b → back to menu"))
 
-	return centerBlock(lines, w, h)
+	return CenterBlock(lines, w, h)
 }

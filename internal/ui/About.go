@@ -5,9 +5,8 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/l4utan/ssh-portofolio/internal/model"
 )
-
-// ── Edit konten di sini ──────────────────────────────────────────────────────
 
 var aboutContent = struct {
 	name     string
@@ -17,22 +16,20 @@ var aboutContent = struct {
 	location string
 	open     bool
 }{
-	name: "Joe Sluis",
-	role: "Software Engineer",
+	name: "l4utan",
+	role: "Programmer",
 	bio: []string{
 		"I build things for the terminal and the web.",
 		"Passionate about developer tooling, open source,",
 		"and clean, minimal interfaces.",
 	},
 	skills:   []string{"Go", "Linux", "Bash", "Docker", "Kubernetes", "PostgreSQL"},
-	location: "Amsterdam, NL",
-	open:     true, // open to work?
+	location: "Malang, ID",
+	open:     true,
 }
 
-// ── View (jangan diubah kecuali mau ubah layout) ─────────────────────────────
-
-func (m model) aboutView() string {
-	w, h := m.width, m.height
+func AboutView(m model.Model) string {
+	w, h := m.Width, m.Height
 	ac := aboutContent
 
 	sectionTitleStyle := lipgloss.NewStyle().
@@ -54,21 +51,17 @@ func (m model) aboutView() string {
 	closedStyle := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#F87171")).Bold(true)
 
-	divider := dividerStyle.Render(strings.Repeat("─", 40))
+	divider := DividerStyle.Render(strings.Repeat("─", 40))
 
 	var lines []string
-	lines = append(lines, menuTitleStyle.Render("About"))
+	lines = append(lines, MenuTitleStyle.Render("About"))
 	lines = append(lines, divider)
 	lines = append(lines, "")
-
-	// Bio
 	lines = append(lines, sectionTitleStyle.Render("// bio"))
 	for _, l := range ac.bio {
 		lines = append(lines, bioStyle.Render(l))
 	}
 	lines = append(lines, "")
-
-	// Info
 	lines = append(lines, sectionTitleStyle.Render("// info"))
 	lines = append(lines, labelStyle.Render("name     ")+"  "+valueStyle.Render(ac.name))
 	lines = append(lines, labelStyle.Render("role     ")+"  "+valueStyle.Render(ac.role))
@@ -79,8 +72,6 @@ func (m model) aboutView() string {
 	}
 	lines = append(lines, labelStyle.Render("status   ")+"  "+openVal)
 	lines = append(lines, "")
-
-	// Skills
 	lines = append(lines, sectionTitleStyle.Render("// skills"))
 	skillRow := ""
 	for _, s := range ac.skills {
@@ -88,16 +79,13 @@ func (m model) aboutView() string {
 	}
 	lines = append(lines, skillRow)
 	lines = append(lines, "")
-
 	lines = append(lines, divider)
-	lines = append(lines, footerStyle.Render("esc / b → back to menu"))
+	lines = append(lines, FooterStyle.Render("esc / b → back to menu"))
 
-	return centerBlock(lines, w, h)
+	return CenterBlock(lines, w, h)
 }
 
-// ── Helper: center block vertically + horizontally ───────────────────────────
-
-func centerBlock(lines []string, w, h int) string {
+func CenterBlock(lines []string, w, h int) string {
 	content := strings.Join(lines, "\n")
 	contentLines := strings.Split(content, "\n")
 

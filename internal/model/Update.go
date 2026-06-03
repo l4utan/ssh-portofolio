@@ -4,75 +4,76 @@ import (
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/l4utan/ssh-portofolio/constants"
 )
 
-func tickCmd() tea.Cmd {
-	return tea.Tick(tickRate, func(time.Time) tea.Msg { return tickMsg{} })
+func TickCmd() tea.Cmd {
+	return tea.Tick(constants.TickRate, func(time.Time) tea.Msg { return TickMsg{} })
 }
 
-func (m model) Init() tea.Cmd {
-	return tickCmd()
+func (m Model) Init() tea.Cmd {
+	return TickCmd()
 }
 
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 
 	case tea.WindowSizeMsg:
-		m.width = msg.Width
-		m.height = msg.Height
-		if len(m.stars) == 0 {
-			m.stars = make([]star, numStars)
-			for i := range m.stars {
-				m.stars[i] = newStar(m.width, m.height)
+		m.Width = msg.Width
+		m.Height = msg.Height
+		if len(m.Stars) == 0 {
+			m.Stars = make([]Star, constants.NumStars)
+			for i := range m.Stars {
+				m.Stars[i] = NewStar(m.Width, m.Height)
 			}
 		}
 		return m, nil
 
-	case tickMsg:
-		m.tick++
-		for i := range m.stars {
-			m.stars[i].update(m.width, m.height)
+	case TickMsg:
+		m.Tick++
+		for i := range m.Stars {
+			m.Stars[i].Update(m.Width, m.Height)
 		}
-		return m, tickCmd()
+		return m, TickCmd()
 
 	case tea.KeyMsg:
-		switch m.state {
+		switch m.State {
 
-		case stateSplash:
+		case StateSplash:
 			switch msg.String() {
 			case "enter", " ":
-				m.state = stateMenu
+				m.State = StateMenu
 			case "q", "ctrl+c":
 				return m, tea.Quit
 			}
 
-		case stateMenu:
+		case StateMenu:
 			switch msg.String() {
 			case "up", "k":
-				if m.cursor > 0 {
-					m.cursor--
+				if m.Cursor > 0 {
+					m.Cursor--
 				}
 			case "down", "j":
-				if m.cursor < len(m.sections)-1 {
-					m.cursor++
+				if m.Cursor < len(m.Sections)-1 {
+					m.Cursor++
 				}
 			case "enter":
-				switch m.cursor {
+				switch m.Cursor {
 				case 0:
-					m.state = stateAbout
+					m.State = StateAbout
 				case 1:
-					m.state = stateProjects
+					m.State = StateProjects
 				case 2:
-					m.state = stateContact
+					m.State = StateContact
 				}
 			case "q", "ctrl+c":
 				return m, tea.Quit
 			}
 
-		case stateAbout, stateProjects, stateContact:
+		case StateAbout, StateProjects, StateContact:
 			switch msg.String() {
 			case "esc", "b":
-				m.state = stateMenu
+				m.State = StateMenu
 			case "q", "ctrl+c":
 				return m, tea.Quit
 			}

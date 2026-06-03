@@ -1,9 +1,10 @@
 package model
+import "github.com/l4utan/ssh-portofolio/constants"
 
-type appState int
+type AppState int
 
 const (
-	StateSplash appState = iota
+	StateSplash AppState = iota
 	StateMenu
 	StateAbout
 	StateProjects
@@ -13,26 +14,26 @@ const (
 type TickMsg struct{}
 
 type Model struct {
-	state    appState
-	width    int
-	height   int
-	stars    []star
-	tick     int
-	cursor   int
-	sections []string
+	State    AppState
+	Width    int
+	Height   int
+	Stars    []Star
+	Tick     int
+	Cursor   int
+	Sections []string
 }
 
-func initialModel(w, h int) model {
-	stars := make([]star, numStars)
+func InitialModel(w, h int) Model {
+	stars := make([]Star, constants.NumStars)
 	for i := range stars {
-		stars[i] = newStar(w, h)
+		stars[i] = NewStar(w, h)
 	}
-	return model{
-		state:  stateSplash,
-		width:  w,
-		height: h,
-		stars:  stars,
-		sections: []string{
+	return Model{
+		State:  StateSplash,
+		Width:  w,
+		Height: h,
+		Stars:  stars,
+		Sections: []string{
 			"About",
 			"Projects",
 			"Contact",

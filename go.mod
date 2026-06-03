@@ -1,4 +1,4 @@
-module sshPorto
+module github.com/l4utan/ssh-portofolio
 
 go 1.26.3
 
